@@ -1,9 +1,5 @@
-interface Action {
-  type: string;
-  newsList?: any[];
-}
-
 const main: () => void = function() {
+  const root: HTMLElement | null = document.querySelector("main");
 
-  document.body.innerHTML = renderContainer();
+  if (root) root.innerHTML = renderIndex();
 }
