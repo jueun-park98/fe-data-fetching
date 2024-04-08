@@ -1,12 +1,17 @@
-const ActionTypes = {
-  FETCH_NEWS_START: "FETCH_NEWS_START",
-  FETCH_NEWS_LOADING: "FETCH_NEWS_LOADING",
-  FETCH_NEWS_SUCCESS: "FETCH_NEWS_SUCCESS",
-  FETCH_NEWS_FAILURE: "FETCH_NEWS_FAILURE",
+interface Action {
+  type: string;
+  payload?: any[];
+}
+
+const actionTypes = {
+  FETCH_NEWS_TITLE_START: "FETCH_NEWS_TITLE_START",
+  FETCH_NEWS_TITLE_LOADING: "FETCH_NEWS_TITLE_LOADING",
+  FETCH_NEWS_TITLE_SUCCESS: "FETCH_NEWS_TITLE_SUCCESS",
+  FETCH_NEWS_TITLE_FAILURE: "FETCH_NEWS_TITLE_FAILURE",
 };
 
-function fetchNews() {
-  Dispatcher.dispatch({
-    type: ActionTypes.FETCH_NEWS_START,
+function fetchNewstitles() {
+  dispatcher.dispatch({
+    type: actionTypes.FETCH_NEWS_TITLE_START,
   });
 }

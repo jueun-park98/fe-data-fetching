@@ -1,14 +1,14 @@
-const NewsStore = (function () {
+const newsStore = (function () {
   let _newsList: any[] = [];
   let _loading: boolean = false;
 
-  Dispatcher.register((action: Action) => {
+  dispatcher.register((action: Action) => {
     switch (action.type) {
-      case ActionTypes.FETCH_NEWS_START:
+      case actionTypes.FETCH_NEWS_TITLE_START:
         _loading = true;
         break;
-      case ActionTypes.FETCH_NEWS_SUCCESS:
-        if (action.newsList) _newsList = action.newsList;
+      case actionTypes.FETCH_NEWS_TITLE_SUCCESS:
+        if (action.payload) _newsList = action.payload;
         _loading = false;
         break;
     }

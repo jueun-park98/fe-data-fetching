@@ -1,4 +1,4 @@
-const Dispatcher = {
+const dispatcher = {
   _callbacks: [] as ((action: Action) => void)[],
 
   register(callback: (action: Action) => void) {
