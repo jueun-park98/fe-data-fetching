@@ -2,8 +2,9 @@
   "name": "fe-data-fetching",
   "version": "1.0.0",
   "description": "뉴스 리스트",
-  "main": "index.js",
+  "main": "App.js",
   "scripts": {
+    "start": "node App.js",
     "compile": "npx tsc"
   },
   "keywords": [],
