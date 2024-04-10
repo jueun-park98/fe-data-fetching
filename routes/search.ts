@@ -4,9 +4,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
-const FIRST_INDEX = 0;
-const DEFAULT_TITLES_LENGTH = 5;
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -15,23 +12,37 @@ interface Article {
   content?: string;
 }
 
-const newsRouter = express.Router();
+const searchRouter = express.Router();
 
-newsRouter.get("/", (req, res, next) => {
+searchRouter.get("/", (req, res) => {
+  const { news_title } = req.query;
+
+  if (!news_title) {
+    res.status(400).send("news_title query is required");
+    return;
+  }
+
   const newsFilePath = path.join(__dirname, "../data/news.json");
 
   fs.readFile(newsFilePath, "utf8", (err, data) => {
     if (err) {
-      console.error("Error reading news file:", err);
+      console.error("Error reading news.json file:", err);
       res.status(500).send("Server error");
       return;
     }
 
     try {
       const jsonData = JSON.parse(data);
-      const titles = jsonData.articles.map((article: Article) => article.title);
+      const matchingArticles = jsonData.articles.find(
+        (article: Article) => article.title === (news_title as string)
+      );
+      
+      if (matchingArticles.length === 0) {
+        res.status(404).send("No articles found matching the title");
+        return;
+      }
 
-      res.json(titles.slice(FIRST_INDEX, DEFAULT_TITLES_LENGTH));
+      res.json(matchingArticles);
     } catch (parseError) {
       console.error("Error parsing news.json file:", parseError);
       res.status(500).send("Server error");
@@ -39,4 +50,4 @@ newsRouter.get("/", (req, res, next) => {
   });
 });
 
-export default newsRouter;
+export default searchRouter;

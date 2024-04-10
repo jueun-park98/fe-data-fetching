@@ -57,7 +57,7 @@ export const newsContentStore = (function () {
       case actionTypes.FETCH_UPDATE_START:
         _loading = true;
         break;
-      case actionTypes.FETCH_NEWS_CONTENT_START:
+      case actionTypes.FETCH_NEWS_CONTENT_SUCCESS:
         if (payload?.title && payload?.content) {
           _newsTitle = payload.title;
           _content = payload.content;

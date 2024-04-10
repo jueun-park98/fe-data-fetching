@@ -55,3 +55,9 @@ export const updateNewstitles: (props: NewstitlesProps) => void = function (prop
 
   if (tag) tag.outerHTML = renderNewstitles(props);
 };
+
+export const updateNewsContent: (props: ContentProps) => void = function (props) {
+  const tag = document.querySelector(`.${props.className}`);
+
+  if (tag) tag.outerHTML = renderNewsContent(props);
+};
