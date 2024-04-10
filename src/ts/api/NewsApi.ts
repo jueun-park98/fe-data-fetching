@@ -1,27 +1,23 @@
+function isArrayOfString(value: any): value is string[] {
+  return Array.isArray(value) && value.every(item => typeof item === 'string');
+}
+
 export const loadNewsTitles: () => Promise<string[]> = async function () {
   const request = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "Content-Length": "5",
     },
   };
 
-  const response = await fetch(`/news`, request);
+  const titles = await fetch(`/news`, request)
+    .then(response => {
+      if(!response.ok) throw new Error("Network Error");
+      return response.json();
+    })
   
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
+  if (!isArrayOfString(titles)) 
+    throw new Error("Response is not an array of strings");
 
-  const titles = await response.json();
-
-  if (isArrayOfString(titles)) {
-    return titles;
-  } else {
-    throw new Error('The response is not an array of strings');
-  }
-}
-
-function isArrayOfString(value: any): value is string[] {
-  return Array.isArray(value) && value.every(item => typeof item === 'string');
+  return titles;
 }

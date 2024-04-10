@@ -1,17 +1,34 @@
-interface Action {
+import { loadNewsTitles } from "../api/NewsApi.js";
+import { CLASS_NAME } from "../constants.js";
+import { dispatcher } from "../dispatcher/Dispatcher.js";
+
+export interface Action {
   type: string;
-  payload?: any[];
+  payload?: {
+    className?: string;
+    titles?: string[];
+    title?: string;
+    content?: string;
+  };
 }
 
-const actionTypes = {
-  FETCH_NEWS_TITLE_START: "FETCH_NEWS_TITLE_START",
-  FETCH_NEWS_TITLE_LOADING: "FETCH_NEWS_TITLE_LOADING",
-  FETCH_NEWS_TITLE_SUCCESS: "FETCH_NEWS_TITLE_SUCCESS",
-  FETCH_NEWS_TITLE_FAILURE: "FETCH_NEWS_TITLE_FAILURE",
+export const actionTypes = {
+  FETCH_UPDATE_START: "FETCH_UPDATE_START",
+  FETCH_NEWS_TITLES_SUCCESS: "FETCH_NEWS_TITLES_SUCCESS",
+  FETCH_NEWS_TITLES_FAILURE: "FETCH_NEWS_TITLES_FAILURE",
+  FETCH_NEWS_CONTENT_START: "FETCH_NEWS_CONTENT_START",
+  FETCH_NEWS_CONTENT_SUCCESS: "FETCH_NEWS_CONTENT_SUCCESS",
+  FETCH_NEWS_CONTENT_FAILURE: "FETCH_NEWS_CONTENT_FAILURE",
 };
 
-function fetchNewstitles() {
-  dispatcher.dispatch({
-    type: actionTypes.FETCH_NEWS_TITLE_START,
+export function fetchNewstitles() {
+  loadNewsTitles().then((titles) => {
+    dispatcher.dispatch({
+      type: actionTypes.FETCH_NEWS_TITLES_SUCCESS,
+      payload: {
+        className: CLASS_NAME.NEWS_TITLES,
+        titles,
+      },
+    });
   });
 }

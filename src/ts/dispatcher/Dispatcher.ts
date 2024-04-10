@@ -1,4 +1,6 @@
-const dispatcher = {
+import { Action } from '../action/Actions';
+
+export const dispatcher = {
   _callbacks: [] as ((action: Action) => void)[],
 
   register(callback: (action: Action) => void) {
