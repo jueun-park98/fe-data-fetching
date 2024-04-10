@@ -6,6 +6,7 @@ import { dirname } from "path";
 
 const FIRST_INDEX = 0;
 const DEFAULT_TITLES_LENGTH = 5;
+const RANDOM_FACTOR = 0.5;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,8 +29,10 @@ newsRouter.get("/", (req, res, next) => {
     }
 
     try {
-      const jsonData = JSON.parse(data);
-      const titles = jsonData.articles.map((article: Article) => article.title);
+      const articles = JSON.parse(data).articles;
+      const titles = articles
+        .map((article: Article) => article.title)
+        .sort((a: Article, b: Article) => RANDOM_FACTOR - Math.random());
 
       res.json(titles.slice(FIRST_INDEX, DEFAULT_TITLES_LENGTH));
     } catch (parseError) {

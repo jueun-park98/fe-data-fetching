@@ -6,7 +6,7 @@ function isArrayOfString(value: any): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === "string");
 }
 
-export const loadNewsTitles: () => Promise<string[]> = async function () {
+export const loadRandomTitles: () => Promise<string[]> = async function () {
   const request = {
     method: "GET",
     headers: {

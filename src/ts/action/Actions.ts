@@ -1,4 +1,4 @@
-import { loadNewsContent, loadNewsTitles } from "../api/NewsApi.js";
+import { loadNewsContent, loadRandomTitles } from "../api/NewsApi.js";
 import { CLASS_NAME } from "../constants.js";
 import { dispatcher } from "../dispatcher/Dispatcher.js";
 
@@ -32,8 +32,8 @@ export const actionTypes = {
   FETCH_NEWS_CONTENT_FAILURE: "FETCH_NEWS_CONTENT_FAILURE",
 };
 
-export function fetchNewstitles() {
-  loadNewsTitles().then((titles) => {
+export function fetchRandomTitles() {
+  loadRandomTitles().then((titles) => {
     dispatcher.dispatch({
       type: actionTypes.FETCH_NEWS_TITLES_SUCCESS,
       payload: {

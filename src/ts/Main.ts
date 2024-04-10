@@ -1,6 +1,6 @@
-import { fetchNewstitles } from './action/Actions.js';
-import { initializeListeners } from './event/EventHandler.js';
-import { newsContentStore, newsTitlesStore } from './store/Store.js';
+import { fetchRandomTitles } from "./action/Actions.js";
+import { initializeListeners } from "./event/EventHandler.js";
+import { newsContentStore, newsTitlesStore } from "./store/Store.js";
 import { renderIndex, updateNewsContent, updateNewstitles } from "./view/View.js";
 
 const main: () => void = function () {
@@ -9,7 +9,7 @@ const main: () => void = function () {
   if (root) root.innerHTML = renderIndex();
   newsTitlesStore.subscribe(updateNewstitles);
   newsContentStore.subscribe(updateNewsContent);
-  fetchNewstitles();
+  fetchRandomTitles();
   initializeListeners();
 };
 
