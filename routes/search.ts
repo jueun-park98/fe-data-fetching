@@ -37,7 +37,7 @@ searchRouter.get("/", (req, res) => {
         (article: Article) => article.title === (news_title as string)
       );
       
-      if (matchingArticles.length === 0) {
+      if (!matchingArticles) {
         res.status(404).send("No articles found matching the title");
         return;
       }
