@@ -1,9 +1,14 @@
 import express from "express";
+import path from "path";
+import fs from "fs";
 
-const router = express.Router();
+const indexRouter = express.Router();
 
-router.get("/", function(req, res, next) {
-  res.send("index page");
+indexRouter.get("/", function(req, res, next) {
+  const indexPath = path.join(__dirname, "src/index.html");
+  const indexHTML = fs.readFileSync(indexPath, "utf-8");
+
+  res.send(indexHTML);
 });
 
-export { router as indexRouter };
+export default indexRouter;
