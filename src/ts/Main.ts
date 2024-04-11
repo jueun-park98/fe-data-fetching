@@ -1,7 +1,7 @@
 import { fetchRandomTitles } from "./action/Actions.js";
 import { newsContentStore, newsTitlesStore } from "./store/Store.js";
 import { renderIndex } from "./view/Renderer.js";
-import { initializeListeners, updateLoading, updateNewstitles, updateNewsContent } from "./view/Updating.js";
+import { initializeListeners, updateLoading, updateNewstitles, updateNewsContent, initializeTimer } from "./view/Updating.js";
 
 const main: () => void = function () {
   const root: HTMLElement | null = document.querySelector("main");
@@ -13,6 +13,7 @@ const main: () => void = function () {
   newsContentStore.subscribe(updateLoading, ["loading"]);
   fetchRandomTitles();
   initializeListeners();
+  initializeTimer();
 };
 
 main();

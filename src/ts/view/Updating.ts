@@ -1,5 +1,18 @@
-import { ContentProps, LoadingProps, NewstitlesProps, renderNewsContent, renderNewstitles } from "./Renderer.js";
+import {
+  BaseProps,
+  ContentProps,
+  LoadingProps,
+  NewstitlesProps,
+  renderNewsContent,
+  renderNewstitles,
+} from "./Renderer.js";
 import { fetchNewsContent, fetchRandomTitles } from "../action/Actions.js";
+import { CLASS_NAME } from "../constants.js";
+
+const TIMER_TEXT = "업데이트까지 ";
+
+let timer: HTMLElement | null = null;
+let timerInterval: number | null = null;
 
 export const initializeListeners: () => void = function () {
   const tag = document.querySelector("main");
@@ -7,10 +20,30 @@ export const initializeListeners: () => void = function () {
   tag?.addEventListener("click", handleClick);
 };
 
+export const initializeTimer: () => void = function () {
+  const tag = document.querySelector(".timer");
+
+  tag?.setAttribute("data-time", "60");
+  timerInterval = setInterval(() => {
+    updateTimer({ className: CLASS_NAME.TIMER });
+  }, 1000) as unknown as number;
+};
+
+const resetTimer: () => void = function () {
+  if (timerInterval != null) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+};
+
 const handleClick: (event: Event) => void = function (event) {
   const target = event.target as HTMLElement;
 
-  if (target && target.tagName === "BUTTON") fetchRandomTitles();
+  if (target && target.tagName === "BUTTON") {
+    fetchRandomTitles();
+    resetTimer();
+    initializeTimer();
+  }
   if (target && target.tagName === "SPAN" && target.textContent) fetchNewsContent(target.textContent);
 };
 
@@ -39,11 +72,25 @@ export const updateLoading: (props: LoadingProps) => void = function (props) {
     loadingImg.style.visibility = "visible";
     document.querySelectorAll("body *").forEach((element) => {
       if (element !== loadingImg && element.tagName !== "SCRIPT" && element.tagName !== "MAIN")
-        element.classList.add("blur");
+        element.classList.add("blur", "unClickable");
     });
     return;
   }
 
   loadingImg.style.visibility = "hidden";
-  document.querySelectorAll(".blur").forEach((element) => element.classList.remove("blur"));
+  document.querySelectorAll(".blur").forEach((element) => element.classList.remove("blur", "unClickable"));
+};
+
+export const updateTimer: (props: BaseProps) => void = function (props) {
+  if (!timer) timer = document.querySelector(`.${props.className}`);
+  let time = Number(timer?.dataset.time);
+
+  if (!timer || isNaN(time) || time <= 0) {
+    fetchRandomTitles();
+    resetTimer();
+    initializeTimer();
+    return;
+  }
+  timer.innerText = `${TIMER_TEXT}${--time}초`;
+  timer.dataset.time = `${time}`;
 };
