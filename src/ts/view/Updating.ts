@@ -68,19 +68,18 @@ export const updateNewsContent: (props: ContentProps) => void = function (props)
 export const updateLoading: (props: LoadingProps) => void = function (props) {
   const loadingImg = document.querySelector(`.${props.className}`) as HTMLElement;
 
+  if (props.isLoading === undefined) return;
+
   if (props.isLoading) {
     loadingImg.style.visibility = "visible";
-    document.querySelectorAll("body *").forEach((element) => {
-      if (element !== loadingImg && element.tagName !== "SCRIPT" && element.tagName !== "MAIN")
-        element.classList.add("blur", "unClickable");
+    document.querySelectorAll("body *:not(script, main)").forEach((element) => {
+      if (element !== loadingImg) element.classList.add("blur", "unclickable");
     });
     return;
   }
 
-  if (props.isLoading === undefined) return;
-
   loadingImg.style.visibility = "hidden";
-  document.querySelectorAll(".blur").forEach((element) => element.classList.remove("blur", "unClickable"));
+  document.querySelectorAll(".blur").forEach((element) => element.classList.remove("blur", "unclickable"));
 };
 
 export const updateTimer: (props: BaseProps) => void = function (props) {
