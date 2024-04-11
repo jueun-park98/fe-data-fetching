@@ -5,22 +5,29 @@ import { dispatcher } from "../dispatcher/Dispatcher.js";
 export const newsTitlesStore = (function () {
   let _titles: string[] = [];
   let _loading: boolean = false;
-  const _observers = new Set<Function>();
-  const notify = (data: Object) => {
-    _observers.forEach((observer: Function) => observer(data));
+
+  const _observers = new Map<Function, string[]>();
+  const notify = (data: Object, type: string) => {
+    _observers.forEach((interestedIn, observer) => {
+      if (interestedIn.includes(type)) {
+        observer(data);
+      }
+    });
   };
 
   dispatcher.register(({ type, payload }: Action) => {
     switch (type) {
-      case actionTypes.FETCH_UPDATE_START:
+      case actionTypes.UPDATE_START:
         _loading = true;
+        notify({ className: CLASS_NAME.LOADING, isLoading: _loading }, "loading");
         break;
       case actionTypes.FETCH_NEWS_TITLES_SUCCESS:
+        _loading = false;
         if (payload?.titles) {
           _titles = payload.titles;
-          notify({ className: CLASS_NAME.NEWS_TITLES, titles: _titles });
+          notify({ className: CLASS_NAME.NEWS_TITLES, titles: _titles }, "titles");
         }
-        _loading = false;
+        notify({ className: CLASS_NAME.LOADING, isLoading: _loading }, "loading");
         break;
       case actionTypes.FETCH_NEWS_TITLES_FAILURE:
         _loading = false;
@@ -29,8 +36,8 @@ export const newsTitlesStore = (function () {
   });
 
   return {
-    subscribe(observer: Function) {
-      _observers.add(observer);
+    subscribe(observer: Function, interestedIn: string[]) {
+      _observers.set(observer, interestedIn);
     },
 
     getTitles() {
@@ -47,23 +54,30 @@ export const newsContentStore = (function () {
   let _newsTitle: string = "";
   let _content: string = "";
   let _loading: boolean = false;
-  const _observers = new Set<Function>();
-  const notify = (data: Object) => {
-    _observers.forEach((observer: Function) => observer(data));
+
+  const _observers = new Map<Function, string[]>();
+  const notify = (data: Object, type: string) => {
+    _observers.forEach((interestedIn, observer) => {
+      if (interestedIn.includes(type)) {
+        observer(data);
+      }
+    });
   };
 
   dispatcher.register(({ type, payload }: Action) => {
     switch (type) {
-      case actionTypes.FETCH_UPDATE_START:
+      case actionTypes.UPDATE_START:
         _loading = true;
+        notify({ className: CLASS_NAME.LOADING, isLoading: _loading }, "loading");
         break;
       case actionTypes.FETCH_NEWS_CONTENT_SUCCESS:
+        _loading = false;
         if (payload?.title && payload?.content) {
           _newsTitle = payload.title;
           _content = payload.content;
-          notify({ className: CLASS_NAME.NEWS_CONTENT, title: _newsTitle, content: _content });
+          notify({ className: CLASS_NAME.NEWS_CONTENT, title: _newsTitle, content: _content }, "content");
         }
-        _loading = false;
+        notify({ className: CLASS_NAME.LOADING, isLoading: _loading }, "loading");
         break;
       case actionTypes.FETCH_NEWS_CONTENT_FAILURE:
         _loading = false;
@@ -72,8 +86,8 @@ export const newsContentStore = (function () {
   });
 
   return {
-    subscribe(observer: Function) {
-      _observers.add(observer);
+    subscribe(observer: Function, interestedIn: string[]) {
+      _observers.set(observer, interestedIn);
     },
 
     getNewsTitle() {

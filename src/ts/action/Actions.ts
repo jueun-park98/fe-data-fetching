@@ -24,7 +24,7 @@ interface News {
 }
 
 export const actionTypes = {
-  FETCH_UPDATE_START: "FETCH_UPDATE_START",
+  UPDATE_START: "UPDATE_START",
   FETCH_NEWS_TITLES_SUCCESS: "FETCH_NEWS_TITLES_SUCCESS",
   FETCH_NEWS_TITLES_FAILURE: "FETCH_NEWS_TITLES_FAILURE",
   FETCH_NEWS_CONTENT_START: "FETCH_NEWS_CONTENT_START",
@@ -32,7 +32,15 @@ export const actionTypes = {
   FETCH_NEWS_CONTENT_FAILURE: "FETCH_NEWS_CONTENT_FAILURE",
 };
 
+const startUpdate: () => void = function () {
+  dispatcher.dispatch({
+    type: actionTypes.UPDATE_START,
+  });
+};
+
 export function fetchRandomTitles() {
+  startUpdate();
+
   loadRandomTitles().then((titles) => {
     dispatcher.dispatch({
       type: actionTypes.FETCH_NEWS_TITLES_SUCCESS,
@@ -45,6 +53,8 @@ export function fetchRandomTitles() {
 }
 
 export function fetchNewsContent(title: string) {
+  startUpdate();
+
   loadNewsContent(title).then((news: News) => {
     dispatcher.dispatch({
       type: actionTypes.FETCH_NEWS_CONTENT_SUCCESS,
