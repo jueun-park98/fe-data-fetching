@@ -49,7 +49,7 @@ export const updateNewstitles: (props: NewstitlesProps) => void = function (prop
   const tag = document.querySelector(`.${props.className}`);
   let firstNews: string;
 
-  if (tag) {
+  if (tag && props.titles) {
     tag.outerHTML = renderNewstitles(props);
     firstNews = props.titles[FIRST_INDEX];
 
@@ -62,7 +62,7 @@ export const updateNewstitles: (props: NewstitlesProps) => void = function (prop
 export const updateNewsContent: (props: ContentProps) => void = function (props) {
   const tag = document.querySelector(`.${props.className}`);
 
-  if (tag) tag.outerHTML = renderNewsContent(props);
+  if (tag && props.title) tag.outerHTML = renderNewsContent(props);
 };
 
 export const updateLoading: (props: LoadingProps) => void = function (props) {
@@ -77,6 +77,8 @@ export const updateLoading: (props: LoadingProps) => void = function (props) {
     return;
   }
 
+  if (props.isLoading === undefined) return;
+
   loadingImg.style.visibility = "hidden";
   document.querySelectorAll(".blur").forEach((element) => element.classList.remove("blur", "unClickable"));
 };
@@ -85,7 +87,7 @@ export const updateTimer: (props: BaseProps) => void = function (props) {
   if (!timer) timer = document.querySelector(`.${props.className}`);
   let time = Number(timer?.dataset.time);
 
-  if (!timer || isNaN(time) || time <= 0) {
+  if (!timer || time <= 0) {
     fetchRandomTitles();
     resetTimer();
     initializeTimer();

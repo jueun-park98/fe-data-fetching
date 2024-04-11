@@ -25,13 +25,11 @@ const delay: (ms: number) => void = async function (ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-let cachedTitles: string[] = [];
-let lastUpdated: number = 0;
-
 newsRouter.get("/", async (req, res) => {
-  const now = Date.now();
   const newsFilePath = path.join(__dirname, "../data/news.json");
   const randomDelay = generateRandomNumber(MIN_DELAY, MAX_DELAY);
+
+  await delay(randomDelay);
 
   fs.readFile(newsFilePath, "utf8", async (err, data) => {
     if (err) {
@@ -45,18 +43,7 @@ newsRouter.get("/", async (req, res) => {
       const titles = articles.map((article: Article) => article.title).sort(() => RANDOM_FACTOR - Math.random());
 
       res.set("Cache-Control", "public, max-age=30");
-
-      if (now - lastUpdated > MAX_AGE || cachedTitles.length === 0) {
-        cachedTitles = titles.slice(FIRST_INDEX, DEFAULT_TITLES_LENGTH);
-        lastUpdated = Date.now();
-
-        await delay(randomDelay);
-
-        res.json(cachedTitles);
-        return;
-      }
-
-      res.json(cachedTitles);
+      res.json(titles.slice(FIRST_INDEX, DEFAULT_TITLES_LENGTH));
     } catch (parseError) {
       console.error("Error parsing news.json file:", parseError);
       res.status(500).send("Server error");

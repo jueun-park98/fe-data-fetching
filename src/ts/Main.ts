@@ -7,13 +7,12 @@ const main: () => void = function () {
   const root: HTMLElement | null = document.querySelector("main");
 
   if (root) root.innerHTML = renderIndex();
-  newsTitlesStore.subscribe(updateNewstitles, ["titles"]);
-  newsTitlesStore.subscribe(updateLoading, ["loading"]);
-  newsContentStore.subscribe(updateNewsContent, ["content"]);
-  newsContentStore.subscribe(updateLoading, ["loading"]);
+  newsTitlesStore.subscribe(updateNewstitles);
+  newsTitlesStore.subscribe(updateLoading);
+  newsContentStore.subscribe(updateNewsContent);
+  newsContentStore.subscribe(updateLoading);
   fetchRandomTitles();
   initializeListeners();
-  initializeTimer();
 };
 
 main();
