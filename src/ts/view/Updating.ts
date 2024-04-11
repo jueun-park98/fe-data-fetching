@@ -87,6 +87,8 @@ export const updateTimer: (props: BaseProps) => void = function (props) {
 
   if (!timer || isNaN(time) || time <= 0) {
     fetchRandomTitles();
+    resetTimer();
+    initializeTimer();
     return;
   }
   timer.innerText = `${TIMER_TEXT}${time--}초`;
