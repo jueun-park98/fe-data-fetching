@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 
 const MIN_DELAY = 2000;
-const MAX_DELAY = 5000;
+const MAX_DELAY = 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

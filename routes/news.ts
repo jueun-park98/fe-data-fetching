@@ -8,7 +8,7 @@ const FIRST_INDEX = 0;
 const DEFAULT_TITLES_LENGTH = 5;
 const RANDOM_FACTOR = 0.5;
 const MIN_DELAY = 2000;
-const MAX_DELAY = 5000;
+const MAX_DELAY = 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -1,18 +1,6 @@
 import { ContentProps, LoadingProps, NewstitlesProps, renderNewsContent, renderNewstitles } from "./Renderer.js";
 import { fetchNewsContent, fetchRandomTitles } from "../action/Actions.js";
 
-export const updateNewstitles: (props: NewstitlesProps) => void = function (props) {
-  const tag = document.querySelector(`.${props.className}`);
-
-  if (tag) tag.outerHTML = renderNewstitles(props);
-};
-
-export const updateNewsContent: (props: ContentProps) => void = function (props) {
-  const tag = document.querySelector(`.${props.className}`);
-
-  if (tag) tag.outerHTML = renderNewsContent(props);
-};
-
 export const initializeListeners: () => void = function () {
   const tag = document.querySelector("main");
 
@@ -24,6 +12,24 @@ const handleClick: (event: Event) => void = function (event) {
 
   if (target && target.tagName === "BUTTON") fetchRandomTitles();
   if (target && target.tagName === "SPAN" && target.textContent) fetchNewsContent(target.textContent);
+};
+
+export const updateNewstitles: (props: NewstitlesProps) => void = function (props) {
+  const tag = document.querySelector(`.${props.className}`);
+  let firstNews;
+
+  if (tag) {
+    tag.outerHTML = renderNewstitles(props);
+    firstNews = props.titles[0];
+
+    fetchNewsContent(firstNews);
+  }
+};
+
+export const updateNewsContent: (props: ContentProps) => void = function (props) {
+  const tag = document.querySelector(`.${props.className}`);
+
+  if (tag) tag.outerHTML = renderNewsContent(props);
 };
 
 export const updateLoading: (props: LoadingProps) => void = function (props) {
