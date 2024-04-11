@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { delay, generateRandomNumber } from './utils';
 
 const MIN_DELAY = 2000;
 const MAX_DELAY = 3000;
@@ -16,10 +17,6 @@ interface Article {
 }
 
 const searchRouter = express.Router();
-
-const delay: (ms: number) => void = async function (ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
 
 searchRouter.get("/", async (req, res) => {
   const { news_title } = req.query;
@@ -57,9 +54,5 @@ searchRouter.get("/", async (req, res) => {
     }
   });
 });
-
-function generateRandomNumber(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 export default searchRouter;

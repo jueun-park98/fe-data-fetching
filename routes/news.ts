@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { delay, generateRandomNumber } from './utils';
 
 const FIRST_INDEX = 0;
 const DEFAULT_TITLES_LENGTH = 5;
@@ -20,10 +21,6 @@ interface Article {
 }
 
 const newsRouter = express.Router();
-
-const delay: (ms: number) => void = async function (ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
 
 newsRouter.get("/", async (req, res) => {
   const newsFilePath = path.join(__dirname, "../data/news.json");
@@ -51,8 +48,5 @@ newsRouter.get("/", async (req, res) => {
   });
 });
 
-function generateRandomNumber(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 export default newsRouter;
