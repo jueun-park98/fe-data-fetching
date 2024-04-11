@@ -10,6 +10,8 @@ import { fetchNewsContent, fetchRandomTitles } from "../action/Actions.js";
 import { CLASS_NAME } from "../constants.js";
 
 const TIMER_TEXT = "업데이트까지 ";
+const TIMER_DELAY = 1000;
+const FIRST_INDEX = 0;
 
 let timer: HTMLElement | null = null;
 let timerInterval: number | null = null;
@@ -26,7 +28,7 @@ export const initializeTimer: () => void = function () {
   tag?.setAttribute("data-time", "60");
   timerInterval = setInterval(() => {
     updateTimer({ className: CLASS_NAME.TIMER });
-  }, 1000) as unknown as number;
+  }, TIMER_DELAY) as unknown as number;
 };
 
 const resetTimer: () => void = function () {
@@ -39,24 +41,22 @@ const resetTimer: () => void = function () {
 const handleClick: (event: Event) => void = function (event) {
   const target = event.target as HTMLElement;
 
-  if (target && target.tagName === "BUTTON") {
-    fetchRandomTitles();
-    resetTimer();
-    initializeTimer();
-  }
+  if (target && target.tagName === "BUTTON") fetchRandomTitles();
   if (target && target.tagName === "SPAN" && target.textContent) fetchNewsContent(target.textContent);
 };
 
 export const updateNewstitles: (props: NewstitlesProps) => void = function (props) {
   const tag = document.querySelector(`.${props.className}`);
-  let firstNews;
+  let firstNews: string;
 
   if (tag) {
     tag.outerHTML = renderNewstitles(props);
-    firstNews = props.titles[0];
+    firstNews = props.titles[FIRST_INDEX];
 
     fetchNewsContent(firstNews);
   }
+  resetTimer();
+  initializeTimer();
 };
 
 export const updateNewsContent: (props: ContentProps) => void = function (props) {
@@ -87,10 +87,8 @@ export const updateTimer: (props: BaseProps) => void = function (props) {
 
   if (!timer || isNaN(time) || time <= 0) {
     fetchRandomTitles();
-    resetTimer();
-    initializeTimer();
     return;
   }
-  timer.innerText = `${TIMER_TEXT}${--time}초`;
+  timer.innerText = `${TIMER_TEXT}${time--}초`;
   timer.dataset.time = `${time}`;
 };
