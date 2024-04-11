@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import { delay, generateRandomNumber } from './utils';
+import { delay, generateRandomNumber } from './utils.js';
 
 const FIRST_INDEX = 0;
 const DEFAULT_TITLES_LENGTH = 5;
