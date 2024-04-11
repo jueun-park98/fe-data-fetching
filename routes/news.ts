@@ -9,6 +9,7 @@ const DEFAULT_TITLES_LENGTH = 5;
 const RANDOM_FACTOR = 0.5;
 const MIN_DELAY = 2000;
 const MAX_DELAY = 3000;
+const MAX_AGE = 30000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,13 +25,15 @@ const delay: (ms: number) => void = async function (ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
+let cachedTitles: string[] = [];
+let lastUpdated: number = 0;
+
 newsRouter.get("/", async (req, res) => {
+  const now = Date.now();
   const newsFilePath = path.join(__dirname, "../data/news.json");
   const randomDelay = generateRandomNumber(MIN_DELAY, MAX_DELAY);
 
-  await delay(randomDelay);
-
-  fs.readFile(newsFilePath, "utf8", (err, data) => {
+  fs.readFile(newsFilePath, "utf8", async (err, data) => {
     if (err) {
       console.error("Error reading news file:", err);
       res.status(500).send("Server error");
@@ -39,11 +42,21 @@ newsRouter.get("/", async (req, res) => {
 
     try {
       const articles = JSON.parse(data).articles;
-      const titles = articles
-        .map((article: Article) => article.title)
-        .sort((a: Article, b: Article) => RANDOM_FACTOR - Math.random());
+      const titles = articles.map((article: Article) => article.title).sort(() => RANDOM_FACTOR - Math.random());
 
-      res.json(titles.slice(FIRST_INDEX, DEFAULT_TITLES_LENGTH));
+      res.set("Cache-Control", "public, max-age=30");
+
+      if (now - lastUpdated > MAX_AGE || cachedTitles.length === 0) {
+        cachedTitles = titles.slice(FIRST_INDEX, DEFAULT_TITLES_LENGTH);
+        lastUpdated = Date.now();
+
+        await delay(randomDelay);
+
+        res.json(cachedTitles);
+        return;
+      }
+
+      res.json(cachedTitles);
     } catch (parseError) {
       console.error("Error parsing news.json file:", parseError);
       res.status(500).send("Server error");
