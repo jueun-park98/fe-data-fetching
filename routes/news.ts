@@ -20,30 +20,35 @@ interface Article {
 
 const newsRouter = express.Router();
 
-newsRouter.get("/", (req, res, next) => {
-  const newsFilePath = path.join(__dirname, "../data/news.json");
+const delay: (ms: number) => void = async function (ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
-  setTimeout(() => {
-    fs.readFile(newsFilePath, "utf8", (err, data) => {
-      if (err) {
-        console.error("Error reading news file:", err);
-        res.status(500).send("Server error");
-        return;
-      }
-  
-      try {
-        const articles = JSON.parse(data).articles;
-        const titles = articles
-          .map((article: Article) => article.title)
-          .sort((a: Article, b: Article) => RANDOM_FACTOR - Math.random());
-  
-        res.json(titles.slice(FIRST_INDEX, DEFAULT_TITLES_LENGTH));
-      } catch (parseError) {
-        console.error("Error parsing news.json file:", parseError);
-        res.status(500).send("Server error");
-      }
-    });
-  }, generateRandomNumber(MIN_DELAY, MAX_DELAY));
+newsRouter.get("/", async (req, res) => {
+  const newsFilePath = path.join(__dirname, "../data/news.json");
+  const randomDelay = generateRandomNumber(MIN_DELAY, MAX_DELAY);
+
+  await delay(randomDelay);
+
+  fs.readFile(newsFilePath, "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading news file:", err);
+      res.status(500).send("Server error");
+      return;
+    }
+
+    try {
+      const articles = JSON.parse(data).articles;
+      const titles = articles
+        .map((article: Article) => article.title)
+        .sort((a: Article, b: Article) => RANDOM_FACTOR - Math.random());
+
+      res.json(titles.slice(FIRST_INDEX, DEFAULT_TITLES_LENGTH));
+    } catch (parseError) {
+      console.error("Error parsing news.json file:", parseError);
+      res.status(500).send("Server error");
+    }
+  });
 });
 
 function generateRandomNumber(min: number, max: number): number {

@@ -39,6 +39,15 @@ main {
   filter: blur(3px);
 }
 
+.unClickable {
+  pointer-events: none;
+}
+
+.timer {
+  margin: 0 0.5rem;
+  color: saddlebrown;
+}
+
 button.update-button {
   width: var(--full-size);
   height: 2rem;

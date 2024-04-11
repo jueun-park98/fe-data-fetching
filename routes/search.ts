@@ -17,8 +17,15 @@ interface Article {
 
 const searchRouter = express.Router();
 
-searchRouter.get("/", (req, res) => {
+const delay: (ms: number) => void = async function (ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+searchRouter.get("/", async (req, res) => {
   const { news_title } = req.query;
+  const randomDelay = generateRandomNumber(MIN_DELAY, MAX_DELAY);
+
+  await delay(randomDelay);
 
   if (!news_title) {
     res.status(400).send("news_title query is required");
@@ -27,30 +34,28 @@ searchRouter.get("/", (req, res) => {
 
   const newsFilePath = path.join(__dirname, "../data/news.json");
 
-  setTimeout(() => {
-    fs.readFile(newsFilePath, "utf8", (err, data) => {
-      if (err) {
-        console.error("Error reading news.json file:", err);
-        res.status(500).send("Server error");
+  fs.readFile(newsFilePath, "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading news.json file:", err);
+      res.status(500).send("Server error");
+      return;
+    }
+
+    try {
+      const articles = JSON.parse(data).articles;
+      const matchingArticles = articles.find((article: Article) => article.title === (news_title as string));
+
+      if (!matchingArticles) {
+        res.status(404).send("No articles found matching the title");
         return;
       }
 
-      try {
-        const articles = JSON.parse(data).articles;
-        const matchingArticles = articles.find((article: Article) => article.title === (news_title as string));
-
-        if (!matchingArticles) {
-          res.status(404).send("No articles found matching the title");
-          return;
-        }
-
-        res.json(matchingArticles);
-      } catch (parseError) {
-        console.error("Error parsing news.json file:", parseError);
-        res.status(500).send("Server error");
-      }
-    });
-  }, generateRandomNumber(MIN_DELAY, MAX_DELAY));
+      res.json(matchingArticles);
+    } catch (parseError) {
+      console.error("Error parsing news.json file:", parseError);
+      res.status(500).send("Server error");
+    }
+  });
 });
 
 function generateRandomNumber(min: number, max: number): number {
