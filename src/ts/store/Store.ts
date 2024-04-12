@@ -2,6 +2,8 @@ import { Action, actionTypes } from "../action/Actions.js";
 import { CLASS_NAME } from "../constants.js";
 import { dispatcher } from "../dispatcher/Dispatcher.js";
 
+const NEWS_CONTENT_ERROR_MESSAGE = "컨텐츠 업데이트 에러!";
+
 export const newsTitlesStore = (function () {
   let _titles: string[] = [];
   let _loading: boolean = false;
@@ -72,7 +74,11 @@ export const newsContentStore = (function () {
         }
         break;
       case actionTypes.FETCH_NEWS_CONTENT_FAILURE:
+        _newsTitle = NEWS_CONTENT_ERROR_MESSAGE;
+        _content = "";
         _loading = false;
+        notify({ className: CLASS_NAME.LOADING, isLoading: _loading });
+        notify({ className: CLASS_NAME.NEWS_CONTENT, title: _newsTitle, content: _content });
         break;
     }
   });

@@ -10,7 +10,6 @@ const DEFAULT_TITLES_LENGTH = 5;
 const RANDOM_FACTOR = 0.5;
 const MIN_DELAY = 2000;
 const MAX_DELAY = 3000;
-const MAX_AGE = 30000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,7 +36,9 @@ newsRouter.get("/", async (req, res) => {
 
     try {
       const articles = JSON.parse(data).articles;
-      const titles = articles.map((article: Article) => article.title).sort(() => RANDOM_FACTOR - Math.random());
+      const titles = articles
+        .map((article: Article) => article.title)
+        .sort(() => RANDOM_FACTOR - Math.random());
 
       res.set("Cache-Control", "public, max-age=30");
       res.json(titles.slice(FIRST_INDEX, DEFAULT_TITLES_LENGTH));

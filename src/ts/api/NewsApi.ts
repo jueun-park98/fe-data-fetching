@@ -32,10 +32,15 @@ export const loadNewsContent: (title: string) => Promise<Object> = async functio
     },
   };
   const encodedTitle = encodeURIComponent(title);
-  const news = await fetch(`${SEARCH_PATH}?${QUERY}=${encodedTitle}`, request).then((response) => {
-    if (!response.ok) throw new Error(`${response.status} : ${response.statusText}`);
-    return response.json();
-  });
 
-  return news;
+  try {
+    const news = await fetch(`${SEARCH_PATH}?${QUERY}=${encodedTitle}`, request).then((response) => {
+      if (!response.ok) throw new Error(`${response.status} : ${response.statusText}`);
+      return response.json();
+    });
+
+    return news;
+  } catch (error) {
+    if (error instanceof Error) throw new Error(error.message);
+  }
 };

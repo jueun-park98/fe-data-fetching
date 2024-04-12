@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import { delay, generateRandomNumber } from './utils.js';
+import { delay, generateRandomBoolean, generateRandomNumber } from './utils.js';
 
 const MIN_DELAY = 2000;
 const MAX_DELAY = 3000;
@@ -21,6 +21,7 @@ const searchRouter = express.Router();
 searchRouter.get("/", async (req, res) => {
   const { news_title } = req.query;
   const randomDelay = generateRandomNumber(MIN_DELAY, MAX_DELAY);
+  const randomFail = generateRandomBoolean();
 
   await delay(randomDelay);
 
@@ -47,6 +48,11 @@ searchRouter.get("/", async (req, res) => {
         return;
       }
 
+      if (randomFail) {
+        res.status(500).send("Server error");
+        return;
+      }
+      
       res.json(matchingArticles);
     } catch (parseError) {
       console.error("Error parsing news.json file:", parseError);
