@@ -5,8 +5,8 @@ import { dispatcher } from "../dispatcher/Dispatcher.js";
 const NEWS_CONTENT_ERROR_MESSAGE = "컨텐츠 업데이트 에러!";
 
 export const newsTitlesStore = (function () {
-  let _titles: string[] = [];
-  let _loading: boolean = false;
+  let titles: string[] = [];
+  let isLoading: boolean = false;
 
   const _observers = new Set<Function>();
   const notify = (data: Object) => {
@@ -16,19 +16,19 @@ export const newsTitlesStore = (function () {
   dispatcher.register(({ type, payload }: Action) => {
     switch (type) {
       case actionTypes.UPDATE_START:
-        _loading = true;
-        notify({ className: CLASS_NAME.LOADING, isLoading: _loading });
+        isLoading = true;
+        notify({ className: CLASS_NAME.LOADING, isLoading });
         break;
       case actionTypes.FETCH_NEWS_TITLES_SUCCESS:
         if (payload?.titles) {
-          _titles = payload.titles;
-          _loading = false;
-          notify({ className: CLASS_NAME.LOADING, isLoading: _loading });
-          notify({ className: CLASS_NAME.NEWS_TITLES, titles: _titles });
+          titles = payload.titles;
+          isLoading = false;
+          notify({ className: CLASS_NAME.LOADING, isLoading });
+          notify({ className: CLASS_NAME.NEWS_TITLES, titles });
         }
         break;
       case actionTypes.FETCH_NEWS_TITLES_FAILURE:
-        _loading = false;
+        isLoading = false;
         break;
     }
   });
@@ -39,19 +39,19 @@ export const newsTitlesStore = (function () {
     },
 
     getTitles() {
-      return _titles;
+      return titles;
     },
 
     isLoading() {
-      return _loading;
+      return isLoading;
     },
   };
 })();
 
 export const newsContentStore = (function () {
-  let _newsTitle: string = "";
-  let _content: string = "";
-  let _loading: boolean = false;
+  let title: string = "";
+  let content: string = "";
+  let isLoading: boolean = false;
 
   const _observers = new Set<Function>();
   const notify = (data: Object) => {
@@ -61,24 +61,24 @@ export const newsContentStore = (function () {
   dispatcher.register(({ type, payload }: Action) => {
     switch (type) {
       case actionTypes.UPDATE_START:
-        _loading = true;
-        notify({ className: CLASS_NAME.LOADING, isLoading: _loading });
+        isLoading = true;
+        notify({ className: CLASS_NAME.LOADING, isLoading });
         break;
       case actionTypes.FETCH_NEWS_CONTENT_SUCCESS:
         if (payload?.title && payload?.content) {
-          _newsTitle = payload.title;
-          _content = payload.content;
-          _loading = false;
-          notify({ className: CLASS_NAME.LOADING, isLoading: _loading });
-          notify({ className: CLASS_NAME.NEWS_CONTENT, title: _newsTitle, content: _content });
+          title = payload.title;
+          content = payload.content;
+          isLoading = false;
+          notify({ className: CLASS_NAME.LOADING, isLoading });
+          notify({ className: CLASS_NAME.NEWS_CONTENT, title, content });
         }
         break;
       case actionTypes.FETCH_NEWS_CONTENT_FAILURE:
-        _newsTitle = NEWS_CONTENT_ERROR_MESSAGE;
-        _content = "";
-        _loading = false;
-        notify({ className: CLASS_NAME.LOADING, isLoading: _loading });
-        notify({ className: CLASS_NAME.NEWS_CONTENT, title: _newsTitle, content: _content });
+        title = NEWS_CONTENT_ERROR_MESSAGE;
+        content = "";
+        isLoading = false;
+        notify({ className: CLASS_NAME.LOADING, isLoading });
+        notify({ className: CLASS_NAME.NEWS_CONTENT, title, content });
         break;
     }
   });
@@ -89,15 +89,15 @@ export const newsContentStore = (function () {
     },
 
     getNewsTitle() {
-      return _newsTitle;
+      return title;
     },
 
     getContent() {
-      return _content;
+      return content;
     },
 
     isLoading() {
-      return _loading;
+      return isLoading;
     },
   };
 })();

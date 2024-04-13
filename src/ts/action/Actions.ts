@@ -73,7 +73,7 @@ export function fetchNewsContent(title: string) {
       });
     })
     .catch((error) => {
-      console.error(`뉴스 컨텐츠 요청 중 에러가 발생 하였습니다. HTTP STATUS CODE ${error.message}`);
+      console.error(`뉴스 컨텐츠 요청 중 에러가 발생 하였습니다. Status Code ${error.message}`);
       notifyFail();
     });
   }

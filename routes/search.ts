@@ -25,6 +25,11 @@ searchRouter.get("/", async (req, res) => {
 
   await delay(randomDelay);
 
+  if (randomFail) {
+    res.status(500).send("Server error");
+    return;
+  }
+
   if (!news_title) {
     res.status(400).send("news_title query is required");
     return;
@@ -45,11 +50,6 @@ searchRouter.get("/", async (req, res) => {
 
       if (!matchingArticles) {
         res.status(404).send("No articles found matching the title");
-        return;
-      }
-
-      if (randomFail) {
-        res.status(500).send("Server error");
         return;
       }
       
