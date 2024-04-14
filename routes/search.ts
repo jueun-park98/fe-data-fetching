@@ -7,6 +7,7 @@ import { delay, generateRandomBoolean, generateRandomNumber } from './utils.js';
 
 const MIN_DELAY = 2000;
 const MAX_DELAY = 3000;
+const RANDOM_FACTOR = 0.5;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -21,7 +22,7 @@ const searchRouter = express.Router();
 searchRouter.get("/", async (req, res) => {
   const { news_title } = req.query;
   const randomDelay = generateRandomNumber(MIN_DELAY, MAX_DELAY);
-  const randomFail = generateRandomBoolean();
+  const randomFail = generateRandomBoolean(RANDOM_FACTOR);
 
   await delay(randomDelay);
 

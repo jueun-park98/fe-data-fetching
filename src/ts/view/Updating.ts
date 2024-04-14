@@ -68,7 +68,7 @@ export const updateNewsContent: (props: ContentProps) => void = function (props)
 export const updateLoading: (props: LoadingProps) => void = function (props) {
   const loadingImg = document.querySelector(`.${props.className}`) as HTMLElement;
 
-  if (props.isLoading === undefined) return;
+  if (typeof props.isLoading !== "boolean") return;
 
   if (props.isLoading) {
     loadingImg.style.visibility = "visible";

@@ -38,7 +38,7 @@ const startUpdate: () => void = function () {
   });
 };
 
-const notifyFail: () => void = function() {
+const notifyFail: () => void = function () {
   dispatcher.dispatch({
     type: actionTypes.FETCH_NEWS_CONTENT_FAILURE,
   });
@@ -58,22 +58,22 @@ export function fetchRandomTitles() {
   });
 }
 
-export function fetchNewsContent(title: string) {
+export async function fetchNewsContent(title: string) {
   startUpdate();
 
-  loadNewsContent(title)
-    .then((news: News) => {
-      dispatcher.dispatch({
-        type: actionTypes.FETCH_NEWS_CONTENT_SUCCESS,
-        payload: {
-          className: CLASS_NAME.NEWS_CONTENT,
-          title: news.title,
-          content: news.content,
-        },
-      });
-    })
-    .catch((error) => {
-      console.error(`뉴스 컨텐츠 요청 중 에러가 발생 하였습니다. Status Code ${error.message}`);
-      notifyFail();
+  try {
+    const news = await loadNewsContent(title);
+
+    dispatcher.dispatch({
+      type: actionTypes.FETCH_NEWS_CONTENT_SUCCESS,
+      payload: {
+        className: CLASS_NAME.NEWS_CONTENT,
+        title: news.title,
+        content: news.content,
+      }
     });
+  } catch (error) {
+    console.error(`뉴스 컨텐츠 요청 중 에러가 발생 하였습니다. Status Code ${error.message}`);
+    notifyFail();
   }
+}
