@@ -1,0 +1,113 @@
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --box-border: none;
+  --box-border-radius: 0.5rem;
+  --box-background-color: white;
+  --button-border-radius: 0.3rem;
+  --full-size: 100%;
+  --box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,0.1);
+}
+
+html {
+  font-size: 16px;
+}
+
+main {
+  position: fixed;
+  display: flex;
+  width: var(--full-size);
+  height: var(--full-size);
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+}
+
+.loading {
+  position: fixed;
+  visibility: visible;
+  z-index: 1000;
+}
+
+.blur {
+  filter: blur(8px);
+}
+
+.unclickable {
+  pointer-events: none;
+}
+
+.timer {
+  margin: 0 0.5rem;
+  color: saddlebrown;
+}
+
+button.update-button {
+  width: var(--full-size);
+  height: 2rem;
+  margin-bottom: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: var(--box-border);
+  border-radius: var(--button-border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button.update-button:hover {
+  background-color: #0056b3;
+}
+
+.side-bar {
+  display: flex;
+  flex-direction: column;
+  height: 32rem;
+  background-color: var(--box-background-color);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--box-border-radius);
+}
+
+.news-titles {
+  display: flex;
+  flex-direction: column;
+  border: var(--box-border);
+  border-radius: var(--box-border-radius);
+  width: 10rem;
+  height: 28rem;
+  padding: 0.5rem;
+}
+
+.news-titles span {
+  margin: 0.25rem;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.news-titles span:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+.news-content {
+  border: var(--box-border);
+  border-radius: var(--box-border-radius);
+  width: 30rem;
+  height: 30rem;
+  margin-left: 1rem;
+  background-color: var(--box-background-color);
+  box-shadow: var(--box-shadow);
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.news-content h1 {
+  margin-top: 0;
+}

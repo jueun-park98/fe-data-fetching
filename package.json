@@ -1,0 +1,20 @@
+{
+  "name": "fe-data-fetching",
+  "version": "1.0.0",
+  "description": "뉴스 리스트",
+  "main": "App.js",
+  "scripts": {
+    "start": "nodemon App.js",
+    "compile": "npx tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0",
+    "typescript": "^5.4.4"
+  },
+  "type": "module"
+}
